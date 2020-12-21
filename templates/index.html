@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+    <title>Demo Page</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="static/assets/css/main.css" />
+	<noscript><link rel="stylesheet" href="static/assets/css/noscript.css" /></noscript>
+    <!--
+    <style>
+        .source{
+            width : 0.1px;
+            height : 0.1px;
+            opacity : 0;
+            overflow : hidden;
+            position : absolute;
+            z-index : -1;
+        }
+
+        .source + label{
+            font-size: 1.25em;
+            font-weight: 700;
+            color: white;
+            background-color: black;
+            display: inline-block;
+            padding: 30px;
+            border-radius: 1ex;
+        }
+
+        .source:focus + label,
+        .source + label:hover{
+            background-color: red;
+        }
+
+        .source + label{
+            cursor: pointer;
+        }
+
+
+    </style>
+    -->
+</head>
+<body class ="is-preload">
+
+    		<!-- Wrapper-->
+			<div id="wrapper">
+
+				<!-- Nav -->
+					<nav id="nav">
+						<!--<a href="#" class="icon solid fa-home"><span>Home</span></a>--->
+						<a href="#work" class="icon solid fa-home"><span>Work</span></a>
+						<a href="#contact" class="icon solid fa-users"><span>Contact</span></a>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Me 
+							<article id="home" class="panel intro">
+								<header>
+									<h1>Jane Doe</h1>
+									<p>Senior Astral Projectionist</p>
+								</header>
+								<a href="#work" class="jumplink pic">
+									<span class="arrow icon solid fa-chevron-right"><span>See my work</span></span>
+									<img src="images/me.jpg" alt="" />
+								</a>
+                            </article>
+                        -->
+
+						<!-- Work -->
+							<article id="work" class="panel">
+								<header>
+									<h1>Fashion Fruits! &#x1F34B;</h1>
+                                </header>
+                                <div>
+                                    <p>
+                                        <h4>AIFFEL 3차 해커톤</h4>
+                                    </p>
+                                    <p>
+                                        이미지를 업로드하면 segmentation 정보를 보여주는 웹어플리케이션입니다<br/>
+                                        의류 정보는 21가지로, 티셔츠, 청바지, 니트, 가디건, 자켓 등으로 분류됩니다. :) <br/>
+                                        기타 문의사항은 xkg1509@gmail.com 으로 연락 부탁드립니다! 
+                                    </p>
+                                </div>
+								<div>
+                                    <div id = 'Sample Image'>
+                                        <h3>Upload Image</h3>
+                                        <!--
+                                        <img src="{{ url_for('static', filename='outputs/output_1203173041.png') }}">
+                                        -->
+                                        <div id = 'inputImage'>
+                                            <!--<label for='source'> Image 정보..</label>-->
+                                            <input type='file' id ='source' class='source' onchange="setThumbnail(event);"/>
+                                            <div id="image_container" style="padding : 5px">
+                                                <div id="loading_container"></div>
+                                            </div>
+                                            <button id='submit' type='submit'>Run</button>
+                                        </div>
+                                
+                                        <div id = 'resultBox'>
+                                            <p id='errorbox'></p>
+                                            <p id='result'>
+                                            </p>
+                                        </div>
+                                
+                                        <script>
+                                            document.getElementById('submit').onclick = () => {
+                                                // 로딩 이미지 구현
+                                                //var maskHeight = $('#image_container').height();
+                                                //var maskWidth = $('#image_container').width();
+                                                var maskHeight = $('#main').height();
+                                                var maskWidth = $('#main').width();
+
+                                                var mask = "<div id='mask' style='position:absolute; z-index:9000; background-color:white; display:none; left:0; top:0;'></div>";
+                                                var loadingImg = '';
+
+                                                loadingImg += "<div id='loadingImg' style='position:absolute; left:45%; top:45%; display:none; z-index:10000;'>";
+                                                loadingImg += " <img src='static/assets/loading3.gif'/>";
+                                                loadingImg += "</div>" //"</div>"; 
+
+                                                //$("#image_container").append(loadingImg).append(mask);
+                                                //$("#image_container").append(mask).append(loadingImg);
+                                                $('#main').append(mask).append(loadingImg);
+                                                
+                                                $('#mask').css({
+                                                    'width' : maskWidth,
+                                                    'height' : maskHeight,
+                                                    'opacity' : '0.2'
+                                                });
+
+                                                $("#mask").show();
+                                                $("#loadingImg").show();
+
+
+                                                var formData = new FormData();
+                                                var source = document.getElementById('source').files[0];
+                                                
+                                                formData.append('source', source);
+                                                
+                                                fetch(
+                                                    '/image',
+                                                    {
+                                                        method : 'POST',
+                                                        body : formData
+                                                    }
+                                                ).then(response => {
+                                                    if (response.status == 200){
+                                                        console.log("request success!!")
+                                                        console.log(response)
+                                                        return response.text();
+                                                    }else{
+                                                        throw Error("Loading Image Error");
+                                                    }
+                                                }).then(img_path => {
+                                                    //var tmp = "{{ url_for('static', filename='" + img_path + "') }}"
+                                                    //var img_html = "<img src='"+ tmp + "'/>";
+                                                    
+                                                    //img_html = "<img src='static/" + img_path + "'  /><p>이것도 테스트</p>"
+                                                    //document.getElementById('result').innerHTML = img_html;
+
+                                                    var img_src = "static/" + img_path;
+                                                    document.getElementById("img_container").src = img_src;
+                                                    $("#loadingImg").hide();
+                                                    $("#mask").hide();
+
+                                                }).catch(e=>{
+                                                    document.getElementById('errorbox').innerHTML = e;
+                                                    $("#loadingImg").hide();
+                                                    $("#mask").hide();
+                                                });
+                                                
+                                                
+                                            };
+                                        </script>
+                                        <script>
+                                            function setThumbnail(event){
+                                                var reader = new FileReader();
+
+                                                reader.onload = function(event){
+                                                    var exist = document.getElementById('img_container') ? true : false;
+                                                    
+                                                    if(exist){
+                                                        var prev_img = document.getElementById("img_container");
+                                                        prev_img.src = event.target.result;
+                                                    }else{
+                                                        var img = document.createElement("img");
+                                                        img.setAttribute("src", event.target.result);
+                                                        img.setAttribute("id", "img_container");
+                                                        document.querySelector("div#image_container").appendChild(img);
+                                                    }
+                                                };
+                                                reader.readAsDataURL(event.target.files[0])
+                                            }
+                                        </script>
+                                    </div>
+                                
+								</div>
+								
+							</article>
+
+						<!-- Contact -->
+							<article id="contact" class="panel">
+								<header>
+									<h1>About Us</h1>
+                                </header>
+                                <p></p>
+                                <div class="row">
+                                    <div id='card' class='col-12' style='padding: 20px;'>
+                                        <div>
+                                            <img src='static/assets/imgs/hm.jpg' style='width:250px; float: left; border-radius:20px;'>
+                                            <p style='float: left; padding : 20px'>
+                                                <h3>정희민</h3>
+                                                <h4><a href="https://github.com/heemin-github" style='text-decoration: none;'>@heemin-github</a></h4>
+                                                신호처리와 영상처리 엔지니어가 되고 싶은 HW 전공자입니다.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div id='card' class='col-12' style='padding: 20px;'>
+                                        <div>
+                                            <img src='static/assets/imgs/ch.JPG' style='float: left; width: 250px; border-radius: 20px;'>
+                                            <p style="float:left; padding: 20px;">
+                                                <h3>김창희</h3>
+                                                <h4><a href="https://github.com/Changhee-Kimm">@Changhee-Kimm</a></h4>
+                                                로봇의 시각을 담당하는 computer vision 엔지니어를 꿈꾸고 있습니다.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div id='card' class='col-12' style='padding: 20px;'>
+                                        <div>
+                                            <img src='static/assets/imgs/jy.jpg' style='float: left; width: 250px; border-radius: 20px;'>
+                                            <p style="float:left; padding: 20px;">
+                                                <h3>이지연</h3>
+                                                <h4><a href="https://github.com/jiyeoon">@jiyeoon</a></h4>
+                                                세계 최고 ML 엔지니어가 되고 싶은 이지연입니다.&#x1F680;
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div id='card' class='col-12' style='padding: 20px;'>
+                                        <div>
+                                            <img src='static/assets/imgs/jm.jpg' style='float: left; width: 250px; border-radius: 20px;'>
+                                            <p style="float:left; padding: 20px;">
+                                                <h3>김준모</h3>
+                                                <h4><a href="https://github.com/username-JM">@username-JM</a></h4>
+                                                생체 신호 처리 및 의료 영상 처리에 관심이 많은 예비 척척석사입니다.&#X1F604;
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--
+								<form action="#" method="post">
+									<div>
+										<div class="row">
+											<div class="col-6 col-12-medium">
+												<input type="text" name="name" placeholder="Name" />
+											</div>
+											<div class="col-6 col-12-medium">
+												<input type="text" name="email" placeholder="Email" />
+											</div>
+											<div class="col-12">
+												<input type="text" name="subject" placeholder="Subject" />
+											</div>
+											<div class="col-12">
+												<textarea name="message" placeholder="Message" rows="6"></textarea>
+											</div>
+											<div class="col-12">
+												<input type="submit" value="Send Message" />
+											</div>
+										</div>
+									</div>
+                                </form>
+                                -->
+							</article>
+
+					</div>
+
+				<!-- Footer -->
+					<div id="footer">
+						<ul class="copyright">
+							<li>&copy; Untitled.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+						</ul>
+					</div>
+
+			</div>
+
+
+	<script src="static/assets/js/jquery.min.js"></script>
+	<script src="static/assets/js/browser.min.js"></script>
+	<script src="static/assets/js/breakpoints.min.js"></script>
+	<script src="static/assets/js/util.js"></script>
+	<script src="static/assets/js/main.js"></script>
+</body>
+</html>
